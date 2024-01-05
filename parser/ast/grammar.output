@@ -1,0 +1,2318 @@
+Терминалы не используются в грамматике
+
+    "not operator"
+
+
+Состояние 84 конфликты: 9 сдвига/вывода
+Состояние 85 конфликты: 1 сдвига/вывода
+Состояние 86 конфликты: 1 сдвига/вывода
+Состояние 87 конфликты: 1 сдвига/вывода
+Состояние 88 конфликты: 1 сдвига/вывода
+Состояние 89 конфликты: 1 сдвига/вывода
+Состояние 90 конфликты: 1 сдвига/вывода
+Состояние 91 конфликты: 1 сдвига/вывода
+Состояние 92 конфликты: 1 сдвига/вывода
+
+
+Грамматика
+
+    0 $accept: queryStart "end"
+
+    1 queryStart: create_table_statement
+    2           | drop_table_statement
+    3           | query
+
+    4 create_table_statement: "CREATE_TABLE" "string" "{" column_list "}"
+
+    5 drop_table_statement: "DROP_TABLE" "string"
+
+    6 column_list: column
+    7            | column_list "," column
+
+    8 column: "string" ":" "string"
+
+    9 query: optional_statement_block_statements final_statement
+
+   10 final_statement: return_statement
+   11                | remove_statement
+   12                | insert_statement
+   13                | update_statement
+
+   14 optional_statement_block_statements: ε
+   15                                    | optional_statement_block_statements statement_block_statement
+
+   16 statement_block_statement: for_statement
+   17                          | filter_statement
+   18                          | remove_statement
+   19                          | insert_statement
+   20                          | update_statement
+
+   21 for_output_variable: variable_name
+
+   22 for_statement: "FOR" for_output_variable "IN" expression
+
+   23 filter_statement: "FILTER" expression
+
+   24 return_statement: "RETURN" expression
+
+   25 in_collection: "IN" in_collection_name
+
+   26 remove_statement: "REMOVE" expression in_collection
+
+   27 insert_statement: "INSERT" expression in_collection
+
+   28 update_parameters: expression in_collection
+
+   29 update_statement: "UPDATE" update_parameters
+
+   30 $@1: ε
+
+   31 object: "{" $@1 optional_object_elements "}"
+
+   32 optional_object_elements: ε
+   33                         | object_elements_list
+   34                         | object_elements_list ","
+
+   35 object_elements_list: object_element
+   36                     | object_elements_list "," object_element
+
+   37 object_element: "string"
+   38               | object_element_name ":" expression
+
+   39 object_element_name: "string"
+   40                    | "q-string"
+
+   41 operator_binary: expression "or operator" expression
+   42                | expression "and operator" expression
+   43                | expression "==" expression
+   44                | expression "!=" expression
+   45                | expression "<" expression
+   46                | expression ">" expression
+   47                | expression "<=" expression
+   48                | expression ">=" expression
+   49                | expression "IN" expression
+
+   50 contains: "contains function" "(" expression "," expression ")"
+
+   51 expression: operator_binary
+   52           | value_literal
+   53           | reference
+   54           | contains
+
+   55 reference: "string"
+   56          | reference '.' "string"
+   57          | "(" expression ")"
+   58          | object
+
+   59 numeric_value: "int"
+   60              | "double"
+
+   61 value_literal: "q-string"
+   62              | numeric_value
+   63              | "null"
+   64              | "true"
+   65              | "false"
+
+   66 in_collection_name: "string"
+
+   67 variable_name: "string"
+
+
+Терминальные символы с правилами, в которых они появляются
+
+    "end" (0) 0
+    '.' (46) 56
+    error (256)
+    "CREATE_TABLE" (258) 4
+    "DROP_TABLE" (259) 5
+    "FOR" (260) 22
+    "FILTER" (261) 23
+    "RETURN" (262) 24
+    "REMOVE" (263) 26
+    "INSERT" (264) 27
+    "UPDATE" (265) 29
+    "IN" (266) 22 25 49
+    "q-string" <s_val> (267) 40 61
+    "null" (268) 63
+    "true" (269) 64
+    "false" (270) 65
+    "string" <s_val> (271) 4 5 8 37 39 55 56 66 67
+    "int" <node> (272) 59
+    "double" <node> (273) 60
+    "==" (274) 43
+    "!=" (275) 44
+    "<" (276) 45
+    ">" (277) 46
+    "<=" (278) 47
+    ">=" (279) 48
+    "," (280) 7 34 36 50
+    "(" (281) 50 57
+    ")" (282) 50 57
+    "{" (283) 4 31
+    "}" (284) 4 31
+    ":" (285) 8 38
+    "not operator" (286)
+    "and operator" (287) 42
+    "or operator" (288) 41
+    "contains function" (289) 50
+
+
+Нетерминальные символы с правилами, в которых они появляются
+
+    $accept (36)
+        on left: 0
+    queryStart (37)
+        on left: 1 2 3
+        on right: 0
+    create_table_statement (38)
+        on left: 4
+        on right: 1
+    drop_table_statement (39)
+        on left: 5
+        on right: 2
+    column_list <node> (40)
+        on left: 6 7
+        on right: 4 7
+    column <node> (41)
+        on left: 8
+        on right: 6 7
+    query (42)
+        on left: 9
+        on right: 3
+    final_statement (43)
+        on left: 10 11 12 13
+        on right: 9
+    optional_statement_block_statements (44)
+        on left: 14 15
+        on right: 9 15
+    statement_block_statement (45)
+        on left: 16 17 18 19 20
+        on right: 15
+    for_output_variable <node> (46)
+        on left: 21
+        on right: 22
+    for_statement (47)
+        on left: 22
+        on right: 16
+    filter_statement (48)
+        on left: 23
+        on right: 17
+    return_statement (49)
+        on left: 24
+        on right: 10
+    in_collection <node> (50)
+        on left: 25
+        on right: 26 27 28
+    remove_statement (51)
+        on left: 26
+        on right: 11 18
+    insert_statement (52)
+        on left: 27
+        on right: 12 19
+    update_parameters (53)
+        on left: 28
+        on right: 29
+    update_statement (54)
+        on left: 29
+        on right: 13 20
+    object <node> (55)
+        on left: 31
+        on right: 58
+    $@1 (56)
+        on left: 30
+        on right: 31
+    optional_object_elements <node> (57)
+        on left: 32 33 34
+        on right: 31
+    object_elements_list <node> (58)
+        on left: 35 36
+        on right: 33 34 36
+    object_element <node> (59)
+        on left: 37 38
+        on right: 35 36
+    object_element_name <s_val> (60)
+        on left: 39 40
+        on right: 38
+    operator_binary <node> (61)
+        on left: 41 42 43 44 45 46 47 48 49
+        on right: 51
+    contains <node> (62)
+        on left: 50
+        on right: 54
+    expression <node> (63)
+        on left: 51 52 53 54
+        on right: 22 23 24 26 27 28 38 41 42 43 44 45 46 47 48 49 50 57
+    reference <node> (64)
+        on left: 55 56 57 58
+        on right: 53 56
+    numeric_value <node> (65)
+        on left: 59 60
+        on right: 62
+    value_literal <node> (66)
+        on left: 61 62 63 64 65
+        on right: 52
+    in_collection_name <node> (67)
+        on left: 66
+        on right: 25
+    variable_name <s_val> (68)
+        on left: 67
+        on right: 21
+
+
+Состояние 0
+
+    0 $accept: • queryStart "end"
+    1 queryStart: • create_table_statement
+    2           | • drop_table_statement
+    3           | • query
+    4 create_table_statement: • "CREATE_TABLE" "string" "{" column_list "}"
+    5 drop_table_statement: • "DROP_TABLE" "string"
+    9 query: • optional_statement_block_statements final_statement
+   14 optional_statement_block_statements: ε •
+   15                                    | • optional_statement_block_statements statement_block_statement
+
+    "CREATE_TABLE"  сдвиг, и переход в состояние 1
+    "DROP_TABLE"    сдвиг, и переход в состояние 2
+
+    $default  вывод с использованием правила 14 (optional_statement_block_statements)
+
+    queryStart                           переход в состояние 3
+    create_table_statement               переход в состояние 4
+    drop_table_statement                 переход в состояние 5
+    query                                переход в состояние 6
+    optional_statement_block_statements  переход в состояние 7
+
+
+Состояние 1
+
+    4 create_table_statement: "CREATE_TABLE" • "string" "{" column_list "}"
+
+    "string"  сдвиг, и переход в состояние 8
+
+
+Состояние 2
+
+    5 drop_table_statement: "DROP_TABLE" • "string"
+
+    "string"  сдвиг, и переход в состояние 9
+
+
+Состояние 3
+
+    0 $accept: queryStart • "end"
+
+    "end"  сдвиг, и переход в состояние 10
+
+
+Состояние 4
+
+    1 queryStart: create_table_statement •
+
+    $default  вывод с использованием правила 1 (queryStart)
+
+
+Состояние 5
+
+    2 queryStart: drop_table_statement •
+
+    $default  вывод с использованием правила 2 (queryStart)
+
+
+Состояние 6
+
+    3 queryStart: query •
+
+    $default  вывод с использованием правила 3 (queryStart)
+
+
+Состояние 7
+
+    9 query: optional_statement_block_statements • final_statement
+   10 final_statement: • return_statement
+   11                | • remove_statement
+   12                | • insert_statement
+   13                | • update_statement
+   15 optional_statement_block_statements: optional_statement_block_statements • statement_block_statement
+   16 statement_block_statement: • for_statement
+   17                          | • filter_statement
+   18                          | • remove_statement
+   19                          | • insert_statement
+   20                          | • update_statement
+   22 for_statement: • "FOR" for_output_variable "IN" expression
+   23 filter_statement: • "FILTER" expression
+   24 return_statement: • "RETURN" expression
+   26 remove_statement: • "REMOVE" expression in_collection
+   27 insert_statement: • "INSERT" expression in_collection
+   29 update_statement: • "UPDATE" update_parameters
+
+    "FOR"     сдвиг, и переход в состояние 11
+    "FILTER"  сдвиг, и переход в состояние 12
+    "RETURN"  сдвиг, и переход в состояние 13
+    "REMOVE"  сдвиг, и переход в состояние 14
+    "INSERT"  сдвиг, и переход в состояние 15
+    "UPDATE"  сдвиг, и переход в состояние 16
+
+    final_statement            переход в состояние 17
+    statement_block_statement  переход в состояние 18
+    for_statement              переход в состояние 19
+    filter_statement           переход в состояние 20
+    return_statement           переход в состояние 21
+    remove_statement           переход в состояние 22
+    insert_statement           переход в состояние 23
+    update_statement           переход в состояние 24
+
+
+Состояние 8
+
+    4 create_table_statement: "CREATE_TABLE" "string" • "{" column_list "}"
+
+    "{"  сдвиг, и переход в состояние 25
+
+
+Состояние 9
+
+    5 drop_table_statement: "DROP_TABLE" "string" •
+
+    $default  вывод с использованием правила 5 (drop_table_statement)
+
+
+Состояние 10
+
+    0 $accept: queryStart "end" •
+
+    $default  принять
+
+
+Состояние 11
+
+   21 for_output_variable: • variable_name
+   22 for_statement: "FOR" • for_output_variable "IN" expression
+   67 variable_name: • "string"
+
+    "string"  сдвиг, и переход в состояние 26
+
+    for_output_variable  переход в состояние 27
+    variable_name        переход в состояние 28
+
+
+Состояние 12
+
+   23 filter_statement: "FILTER" • expression
+   31 object: • "{" $@1 optional_object_elements "}"
+   41 operator_binary: • expression "or operator" expression
+   42                | • expression "and operator" expression
+   43                | • expression "==" expression
+   44                | • expression "!=" expression
+   45                | • expression "<" expression
+   46                | • expression ">" expression
+   47                | • expression "<=" expression
+   48                | • expression ">=" expression
+   49                | • expression "IN" expression
+   50 contains: • "contains function" "(" expression "," expression ")"
+   51 expression: • operator_binary
+   52           | • value_literal
+   53           | • reference
+   54           | • contains
+   55 reference: • "string"
+   56          | • reference '.' "string"
+   57          | • "(" expression ")"
+   58          | • object
+   59 numeric_value: • "int"
+   60              | • "double"
+   61 value_literal: • "q-string"
+   62              | • numeric_value
+   63              | • "null"
+   64              | • "true"
+   65              | • "false"
+
+    "q-string"           сдвиг, и переход в состояние 29
+    "null"               сдвиг, и переход в состояние 30
+    "true"               сдвиг, и переход в состояние 31
+    "false"              сдвиг, и переход в состояние 32
+    "string"             сдвиг, и переход в состояние 33
+    "int"                сдвиг, и переход в состояние 34
+    "double"             сдвиг, и переход в состояние 35
+    "("                  сдвиг, и переход в состояние 36
+    "{"                  сдвиг, и переход в состояние 37
+    "contains function"  сдвиг, и переход в состояние 38
+
+    object           переход в состояние 39
+    operator_binary  переход в состояние 40
+    contains         переход в состояние 41
+    expression       переход в состояние 42
+    reference        переход в состояние 43
+    numeric_value    переход в состояние 44
+    value_literal    переход в состояние 45
+
+
+Состояние 13
+
+   24 return_statement: "RETURN" • expression
+   31 object: • "{" $@1 optional_object_elements "}"
+   41 operator_binary: • expression "or operator" expression
+   42                | • expression "and operator" expression
+   43                | • expression "==" expression
+   44                | • expression "!=" expression
+   45                | • expression "<" expression
+   46                | • expression ">" expression
+   47                | • expression "<=" expression
+   48                | • expression ">=" expression
+   49                | • expression "IN" expression
+   50 contains: • "contains function" "(" expression "," expression ")"
+   51 expression: • operator_binary
+   52           | • value_literal
+   53           | • reference
+   54           | • contains
+   55 reference: • "string"
+   56          | • reference '.' "string"
+   57          | • "(" expression ")"
+   58          | • object
+   59 numeric_value: • "int"
+   60              | • "double"
+   61 value_literal: • "q-string"
+   62              | • numeric_value
+   63              | • "null"
+   64              | • "true"
+   65              | • "false"
+
+    "q-string"           сдвиг, и переход в состояние 29
+    "null"               сдвиг, и переход в состояние 30
+    "true"               сдвиг, и переход в состояние 31
+    "false"              сдвиг, и переход в состояние 32
+    "string"             сдвиг, и переход в состояние 33
+    "int"                сдвиг, и переход в состояние 34
+    "double"             сдвиг, и переход в состояние 35
+    "("                  сдвиг, и переход в состояние 36
+    "{"                  сдвиг, и переход в состояние 37
+    "contains function"  сдвиг, и переход в состояние 38
+
+    object           переход в состояние 39
+    operator_binary  переход в состояние 40
+    contains         переход в состояние 41
+    expression       переход в состояние 46
+    reference        переход в состояние 43
+    numeric_value    переход в состояние 44
+    value_literal    переход в состояние 45
+
+
+Состояние 14
+
+   26 remove_statement: "REMOVE" • expression in_collection
+   31 object: • "{" $@1 optional_object_elements "}"
+   41 operator_binary: • expression "or operator" expression
+   42                | • expression "and operator" expression
+   43                | • expression "==" expression
+   44                | • expression "!=" expression
+   45                | • expression "<" expression
+   46                | • expression ">" expression
+   47                | • expression "<=" expression
+   48                | • expression ">=" expression
+   49                | • expression "IN" expression
+   50 contains: • "contains function" "(" expression "," expression ")"
+   51 expression: • operator_binary
+   52           | • value_literal
+   53           | • reference
+   54           | • contains
+   55 reference: • "string"
+   56          | • reference '.' "string"
+   57          | • "(" expression ")"
+   58          | • object
+   59 numeric_value: • "int"
+   60              | • "double"
+   61 value_literal: • "q-string"
+   62              | • numeric_value
+   63              | • "null"
+   64              | • "true"
+   65              | • "false"
+
+    "q-string"           сдвиг, и переход в состояние 29
+    "null"               сдвиг, и переход в состояние 30
+    "true"               сдвиг, и переход в состояние 31
+    "false"              сдвиг, и переход в состояние 32
+    "string"             сдвиг, и переход в состояние 33
+    "int"                сдвиг, и переход в состояние 34
+    "double"             сдвиг, и переход в состояние 35
+    "("                  сдвиг, и переход в состояние 36
+    "{"                  сдвиг, и переход в состояние 37
+    "contains function"  сдвиг, и переход в состояние 38
+
+    object           переход в состояние 39
+    operator_binary  переход в состояние 40
+    contains         переход в состояние 41
+    expression       переход в состояние 47
+    reference        переход в состояние 43
+    numeric_value    переход в состояние 44
+    value_literal    переход в состояние 45
+
+
+Состояние 15
+
+   27 insert_statement: "INSERT" • expression in_collection
+   31 object: • "{" $@1 optional_object_elements "}"
+   41 operator_binary: • expression "or operator" expression
+   42                | • expression "and operator" expression
+   43                | • expression "==" expression
+   44                | • expression "!=" expression
+   45                | • expression "<" expression
+   46                | • expression ">" expression
+   47                | • expression "<=" expression
+   48                | • expression ">=" expression
+   49                | • expression "IN" expression
+   50 contains: • "contains function" "(" expression "," expression ")"
+   51 expression: • operator_binary
+   52           | • value_literal
+   53           | • reference
+   54           | • contains
+   55 reference: • "string"
+   56          | • reference '.' "string"
+   57          | • "(" expression ")"
+   58          | • object
+   59 numeric_value: • "int"
+   60              | • "double"
+   61 value_literal: • "q-string"
+   62              | • numeric_value
+   63              | • "null"
+   64              | • "true"
+   65              | • "false"
+
+    "q-string"           сдвиг, и переход в состояние 29
+    "null"               сдвиг, и переход в состояние 30
+    "true"               сдвиг, и переход в состояние 31
+    "false"              сдвиг, и переход в состояние 32
+    "string"             сдвиг, и переход в состояние 33
+    "int"                сдвиг, и переход в состояние 34
+    "double"             сдвиг, и переход в состояние 35
+    "("                  сдвиг, и переход в состояние 36
+    "{"                  сдвиг, и переход в состояние 37
+    "contains function"  сдвиг, и переход в состояние 38
+
+    object           переход в состояние 39
+    operator_binary  переход в состояние 40
+    contains         переход в состояние 41
+    expression       переход в состояние 48
+    reference        переход в состояние 43
+    numeric_value    переход в состояние 44
+    value_literal    переход в состояние 45
+
+
+Состояние 16
+
+   28 update_parameters: • expression in_collection
+   29 update_statement: "UPDATE" • update_parameters
+   31 object: • "{" $@1 optional_object_elements "}"
+   41 operator_binary: • expression "or operator" expression
+   42                | • expression "and operator" expression
+   43                | • expression "==" expression
+   44                | • expression "!=" expression
+   45                | • expression "<" expression
+   46                | • expression ">" expression
+   47                | • expression "<=" expression
+   48                | • expression ">=" expression
+   49                | • expression "IN" expression
+   50 contains: • "contains function" "(" expression "," expression ")"
+   51 expression: • operator_binary
+   52           | • value_literal
+   53           | • reference
+   54           | • contains
+   55 reference: • "string"
+   56          | • reference '.' "string"
+   57          | • "(" expression ")"
+   58          | • object
+   59 numeric_value: • "int"
+   60              | • "double"
+   61 value_literal: • "q-string"
+   62              | • numeric_value
+   63              | • "null"
+   64              | • "true"
+   65              | • "false"
+
+    "q-string"           сдвиг, и переход в состояние 29
+    "null"               сдвиг, и переход в состояние 30
+    "true"               сдвиг, и переход в состояние 31
+    "false"              сдвиг, и переход в состояние 32
+    "string"             сдвиг, и переход в состояние 33
+    "int"                сдвиг, и переход в состояние 34
+    "double"             сдвиг, и переход в состояние 35
+    "("                  сдвиг, и переход в состояние 36
+    "{"                  сдвиг, и переход в состояние 37
+    "contains function"  сдвиг, и переход в состояние 38
+
+    update_parameters  переход в состояние 49
+    object             переход в состояние 39
+    operator_binary    переход в состояние 40
+    contains           переход в состояние 41
+    expression         переход в состояние 50
+    reference          переход в состояние 43
+    numeric_value      переход в состояние 44
+    value_literal      переход в состояние 45
+
+
+Состояние 17
+
+    9 query: optional_statement_block_statements final_statement •
+
+    $default  вывод с использованием правила 9 (query)
+
+
+Состояние 18
+
+   15 optional_statement_block_statements: optional_statement_block_statements statement_block_statement •
+
+    $default  вывод с использованием правила 15 (optional_statement_block_statements)
+
+
+Состояние 19
+
+   16 statement_block_statement: for_statement •
+
+    $default  вывод с использованием правила 16 (statement_block_statement)
+
+
+Состояние 20
+
+   17 statement_block_statement: filter_statement •
+
+    $default  вывод с использованием правила 17 (statement_block_statement)
+
+
+Состояние 21
+
+   10 final_statement: return_statement •
+
+    $default  вывод с использованием правила 10 (final_statement)
+
+
+Состояние 22
+
+   11 final_statement: remove_statement •
+   18 statement_block_statement: remove_statement •
+
+    "end"     вывод с использованием правила 11 (final_statement)
+    $default  вывод с использованием правила 18 (statement_block_statement)
+
+
+Состояние 23
+
+   12 final_statement: insert_statement •
+   19 statement_block_statement: insert_statement •
+
+    "end"     вывод с использованием правила 12 (final_statement)
+    $default  вывод с использованием правила 19 (statement_block_statement)
+
+
+Состояние 24
+
+   13 final_statement: update_statement •
+   20 statement_block_statement: update_statement •
+
+    "end"     вывод с использованием правила 13 (final_statement)
+    $default  вывод с использованием правила 20 (statement_block_statement)
+
+
+Состояние 25
+
+    4 create_table_statement: "CREATE_TABLE" "string" "{" • column_list "}"
+    6 column_list: • column
+    7            | • column_list "," column
+    8 column: • "string" ":" "string"
+
+    "string"  сдвиг, и переход в состояние 51
+
+    column_list  переход в состояние 52
+    column       переход в состояние 53
+
+
+Состояние 26
+
+   67 variable_name: "string" •
+
+    $default  вывод с использованием правила 67 (variable_name)
+
+
+Состояние 27
+
+   22 for_statement: "FOR" for_output_variable • "IN" expression
+
+    "IN"  сдвиг, и переход в состояние 54
+
+
+Состояние 28
+
+   21 for_output_variable: variable_name •
+
+    $default  вывод с использованием правила 21 (for_output_variable)
+
+
+Состояние 29
+
+   61 value_literal: "q-string" •
+
+    $default  вывод с использованием правила 61 (value_literal)
+
+
+Состояние 30
+
+   63 value_literal: "null" •
+
+    $default  вывод с использованием правила 63 (value_literal)
+
+
+Состояние 31
+
+   64 value_literal: "true" •
+
+    $default  вывод с использованием правила 64 (value_literal)
+
+
+Состояние 32
+
+   65 value_literal: "false" •
+
+    $default  вывод с использованием правила 65 (value_literal)
+
+
+Состояние 33
+
+   55 reference: "string" •
+
+    $default  вывод с использованием правила 55 (reference)
+
+
+Состояние 34
+
+   59 numeric_value: "int" •
+
+    $default  вывод с использованием правила 59 (numeric_value)
+
+
+Состояние 35
+
+   60 numeric_value: "double" •
+
+    $default  вывод с использованием правила 60 (numeric_value)
+
+
+Состояние 36
+
+   31 object: • "{" $@1 optional_object_elements "}"
+   41 operator_binary: • expression "or operator" expression
+   42                | • expression "and operator" expression
+   43                | • expression "==" expression
+   44                | • expression "!=" expression
+   45                | • expression "<" expression
+   46                | • expression ">" expression
+   47                | • expression "<=" expression
+   48                | • expression ">=" expression
+   49                | • expression "IN" expression
+   50 contains: • "contains function" "(" expression "," expression ")"
+   51 expression: • operator_binary
+   52           | • value_literal
+   53           | • reference
+   54           | • contains
+   55 reference: • "string"
+   56          | • reference '.' "string"
+   57          | • "(" expression ")"
+   57          | "(" • expression ")"
+   58          | • object
+   59 numeric_value: • "int"
+   60              | • "double"
+   61 value_literal: • "q-string"
+   62              | • numeric_value
+   63              | • "null"
+   64              | • "true"
+   65              | • "false"
+
+    "q-string"           сдвиг, и переход в состояние 29
+    "null"               сдвиг, и переход в состояние 30
+    "true"               сдвиг, и переход в состояние 31
+    "false"              сдвиг, и переход в состояние 32
+    "string"             сдвиг, и переход в состояние 33
+    "int"                сдвиг, и переход в состояние 34
+    "double"             сдвиг, и переход в состояние 35
+    "("                  сдвиг, и переход в состояние 36
+    "{"                  сдвиг, и переход в состояние 37
+    "contains function"  сдвиг, и переход в состояние 38
+
+    object           переход в состояние 39
+    operator_binary  переход в состояние 40
+    contains         переход в состояние 41
+    expression       переход в состояние 55
+    reference        переход в состояние 43
+    numeric_value    переход в состояние 44
+    value_literal    переход в состояние 45
+
+
+Состояние 37
+
+   30 $@1: ε •
+   31 object: "{" • $@1 optional_object_elements "}"
+
+    $default  вывод с использованием правила 30 ($@1)
+
+    $@1  переход в состояние 56
+
+
+Состояние 38
+
+   50 contains: "contains function" • "(" expression "," expression ")"
+
+    "("  сдвиг, и переход в состояние 57
+
+
+Состояние 39
+
+   58 reference: object •
+
+    $default  вывод с использованием правила 58 (reference)
+
+
+Состояние 40
+
+   51 expression: operator_binary •
+
+    $default  вывод с использованием правила 51 (expression)
+
+
+Состояние 41
+
+   54 expression: contains •
+
+    $default  вывод с использованием правила 54 (expression)
+
+
+Состояние 42
+
+   23 filter_statement: "FILTER" expression •
+   41 operator_binary: expression • "or operator" expression
+   42                | expression • "and operator" expression
+   43                | expression • "==" expression
+   44                | expression • "!=" expression
+   45                | expression • "<" expression
+   46                | expression • ">" expression
+   47                | expression • "<=" expression
+   48                | expression • ">=" expression
+   49                | expression • "IN" expression
+
+    "IN"            сдвиг, и переход в состояние 58
+    "=="            сдвиг, и переход в состояние 59
+    "!="            сдвиг, и переход в состояние 60
+    "<"             сдвиг, и переход в состояние 61
+    ">"             сдвиг, и переход в состояние 62
+    "<="            сдвиг, и переход в состояние 63
+    ">="            сдвиг, и переход в состояние 64
+    "and operator"  сдвиг, и переход в состояние 65
+    "or operator"   сдвиг, и переход в состояние 66
+
+    $default  вывод с использованием правила 23 (filter_statement)
+
+
+Состояние 43
+
+   53 expression: reference •
+   56 reference: reference • '.' "string"
+
+    '.'  сдвиг, и переход в состояние 67
+
+    $default  вывод с использованием правила 53 (expression)
+
+
+Состояние 44
+
+   62 value_literal: numeric_value •
+
+    $default  вывод с использованием правила 62 (value_literal)
+
+
+Состояние 45
+
+   52 expression: value_literal •
+
+    $default  вывод с использованием правила 52 (expression)
+
+
+Состояние 46
+
+   24 return_statement: "RETURN" expression •
+   41 operator_binary: expression • "or operator" expression
+   42                | expression • "and operator" expression
+   43                | expression • "==" expression
+   44                | expression • "!=" expression
+   45                | expression • "<" expression
+   46                | expression • ">" expression
+   47                | expression • "<=" expression
+   48                | expression • ">=" expression
+   49                | expression • "IN" expression
+
+    "IN"            сдвиг, и переход в состояние 58
+    "=="            сдвиг, и переход в состояние 59
+    "!="            сдвиг, и переход в состояние 60
+    "<"             сдвиг, и переход в состояние 61
+    ">"             сдвиг, и переход в состояние 62
+    "<="            сдвиг, и переход в состояние 63
+    ">="            сдвиг, и переход в состояние 64
+    "and operator"  сдвиг, и переход в состояние 65
+    "or operator"   сдвиг, и переход в состояние 66
+
+    $default  вывод с использованием правила 24 (return_statement)
+
+
+Состояние 47
+
+   25 in_collection: • "IN" in_collection_name
+   26 remove_statement: "REMOVE" expression • in_collection
+   41 operator_binary: expression • "or operator" expression
+   42                | expression • "and operator" expression
+   43                | expression • "==" expression
+   44                | expression • "!=" expression
+   45                | expression • "<" expression
+   46                | expression • ">" expression
+   47                | expression • "<=" expression
+   48                | expression • ">=" expression
+   49                | expression • "IN" expression
+
+    "IN"            сдвиг, и переход в состояние 68
+    "=="            сдвиг, и переход в состояние 59
+    "!="            сдвиг, и переход в состояние 60
+    "<"             сдвиг, и переход в состояние 61
+    ">"             сдвиг, и переход в состояние 62
+    "<="            сдвиг, и переход в состояние 63
+    ">="            сдвиг, и переход в состояние 64
+    "and operator"  сдвиг, и переход в состояние 65
+    "or operator"   сдвиг, и переход в состояние 66
+
+    in_collection  переход в состояние 69
+
+
+Состояние 48
+
+   25 in_collection: • "IN" in_collection_name
+   27 insert_statement: "INSERT" expression • in_collection
+   41 operator_binary: expression • "or operator" expression
+   42                | expression • "and operator" expression
+   43                | expression • "==" expression
+   44                | expression • "!=" expression
+   45                | expression • "<" expression
+   46                | expression • ">" expression
+   47                | expression • "<=" expression
+   48                | expression • ">=" expression
+   49                | expression • "IN" expression
+
+    "IN"            сдвиг, и переход в состояние 68
+    "=="            сдвиг, и переход в состояние 59
+    "!="            сдвиг, и переход в состояние 60
+    "<"             сдвиг, и переход в состояние 61
+    ">"             сдвиг, и переход в состояние 62
+    "<="            сдвиг, и переход в состояние 63
+    ">="            сдвиг, и переход в состояние 64
+    "and operator"  сдвиг, и переход в состояние 65
+    "or operator"   сдвиг, и переход в состояние 66
+
+    in_collection  переход в состояние 70
+
+
+Состояние 49
+
+   29 update_statement: "UPDATE" update_parameters •
+
+    $default  вывод с использованием правила 29 (update_statement)
+
+
+Состояние 50
+
+   25 in_collection: • "IN" in_collection_name
+   28 update_parameters: expression • in_collection
+   41 operator_binary: expression • "or operator" expression
+   42                | expression • "and operator" expression
+   43                | expression • "==" expression
+   44                | expression • "!=" expression
+   45                | expression • "<" expression
+   46                | expression • ">" expression
+   47                | expression • "<=" expression
+   48                | expression • ">=" expression
+   49                | expression • "IN" expression
+
+    "IN"            сдвиг, и переход в состояние 68
+    "=="            сдвиг, и переход в состояние 59
+    "!="            сдвиг, и переход в состояние 60
+    "<"             сдвиг, и переход в состояние 61
+    ">"             сдвиг, и переход в состояние 62
+    "<="            сдвиг, и переход в состояние 63
+    ">="            сдвиг, и переход в состояние 64
+    "and operator"  сдвиг, и переход в состояние 65
+    "or operator"   сдвиг, и переход в состояние 66
+
+    in_collection  переход в состояние 71
+
+
+Состояние 51
+
+    8 column: "string" • ":" "string"
+
+    ":"  сдвиг, и переход в состояние 72
+
+
+Состояние 52
+
+    4 create_table_statement: "CREATE_TABLE" "string" "{" column_list • "}"
+    7 column_list: column_list • "," column
+
+    ","  сдвиг, и переход в состояние 73
+    "}"  сдвиг, и переход в состояние 74
+
+
+Состояние 53
+
+    6 column_list: column •
+
+    $default  вывод с использованием правила 6 (column_list)
+
+
+Состояние 54
+
+   22 for_statement: "FOR" for_output_variable "IN" • expression
+   31 object: • "{" $@1 optional_object_elements "}"
+   41 operator_binary: • expression "or operator" expression
+   42                | • expression "and operator" expression
+   43                | • expression "==" expression
+   44                | • expression "!=" expression
+   45                | • expression "<" expression
+   46                | • expression ">" expression
+   47                | • expression "<=" expression
+   48                | • expression ">=" expression
+   49                | • expression "IN" expression
+   50 contains: • "contains function" "(" expression "," expression ")"
+   51 expression: • operator_binary
+   52           | • value_literal
+   53           | • reference
+   54           | • contains
+   55 reference: • "string"
+   56          | • reference '.' "string"
+   57          | • "(" expression ")"
+   58          | • object
+   59 numeric_value: • "int"
+   60              | • "double"
+   61 value_literal: • "q-string"
+   62              | • numeric_value
+   63              | • "null"
+   64              | • "true"
+   65              | • "false"
+
+    "q-string"           сдвиг, и переход в состояние 29
+    "null"               сдвиг, и переход в состояние 30
+    "true"               сдвиг, и переход в состояние 31
+    "false"              сдвиг, и переход в состояние 32
+    "string"             сдвиг, и переход в состояние 33
+    "int"                сдвиг, и переход в состояние 34
+    "double"             сдвиг, и переход в состояние 35
+    "("                  сдвиг, и переход в состояние 36
+    "{"                  сдвиг, и переход в состояние 37
+    "contains function"  сдвиг, и переход в состояние 38
+
+    object           переход в состояние 39
+    operator_binary  переход в состояние 40
+    contains         переход в состояние 41
+    expression       переход в состояние 75
+    reference        переход в состояние 43
+    numeric_value    переход в состояние 44
+    value_literal    переход в состояние 45
+
+
+Состояние 55
+
+   41 operator_binary: expression • "or operator" expression
+   42                | expression • "and operator" expression
+   43                | expression • "==" expression
+   44                | expression • "!=" expression
+   45                | expression • "<" expression
+   46                | expression • ">" expression
+   47                | expression • "<=" expression
+   48                | expression • ">=" expression
+   49                | expression • "IN" expression
+   57 reference: "(" expression • ")"
+
+    "IN"            сдвиг, и переход в состояние 58
+    "=="            сдвиг, и переход в состояние 59
+    "!="            сдвиг, и переход в состояние 60
+    "<"             сдвиг, и переход в состояние 61
+    ">"             сдвиг, и переход в состояние 62
+    "<="            сдвиг, и переход в состояние 63
+    ">="            сдвиг, и переход в состояние 64
+    ")"             сдвиг, и переход в состояние 76
+    "and operator"  сдвиг, и переход в состояние 65
+    "or operator"   сдвиг, и переход в состояние 66
+
+
+Состояние 56
+
+   31 object: "{" $@1 • optional_object_elements "}"
+   32 optional_object_elements: ε •
+   33                         | • object_elements_list
+   34                         | • object_elements_list ","
+   35 object_elements_list: • object_element
+   36                     | • object_elements_list "," object_element
+   37 object_element: • "string"
+   38               | • object_element_name ":" expression
+   39 object_element_name: • "string"
+   40                    | • "q-string"
+
+    "q-string"  сдвиг, и переход в состояние 77
+    "string"    сдвиг, и переход в состояние 78
+
+    $default  вывод с использованием правила 32 (optional_object_elements)
+
+    optional_object_elements  переход в состояние 79
+    object_elements_list      переход в состояние 80
+    object_element            переход в состояние 81
+    object_element_name       переход в состояние 82
+
+
+Состояние 57
+
+   31 object: • "{" $@1 optional_object_elements "}"
+   41 operator_binary: • expression "or operator" expression
+   42                | • expression "and operator" expression
+   43                | • expression "==" expression
+   44                | • expression "!=" expression
+   45                | • expression "<" expression
+   46                | • expression ">" expression
+   47                | • expression "<=" expression
+   48                | • expression ">=" expression
+   49                | • expression "IN" expression
+   50 contains: • "contains function" "(" expression "," expression ")"
+   50         | "contains function" "(" • expression "," expression ")"
+   51 expression: • operator_binary
+   52           | • value_literal
+   53           | • reference
+   54           | • contains
+   55 reference: • "string"
+   56          | • reference '.' "string"
+   57          | • "(" expression ")"
+   58          | • object
+   59 numeric_value: • "int"
+   60              | • "double"
+   61 value_literal: • "q-string"
+   62              | • numeric_value
+   63              | • "null"
+   64              | • "true"
+   65              | • "false"
+
+    "q-string"           сдвиг, и переход в состояние 29
+    "null"               сдвиг, и переход в состояние 30
+    "true"               сдвиг, и переход в состояние 31
+    "false"              сдвиг, и переход в состояние 32
+    "string"             сдвиг, и переход в состояние 33
+    "int"                сдвиг, и переход в состояние 34
+    "double"             сдвиг, и переход в состояние 35
+    "("                  сдвиг, и переход в состояние 36
+    "{"                  сдвиг, и переход в состояние 37
+    "contains function"  сдвиг, и переход в состояние 38
+
+    object           переход в состояние 39
+    operator_binary  переход в состояние 40
+    contains         переход в состояние 41
+    expression       переход в состояние 83
+    reference        переход в состояние 43
+    numeric_value    переход в состояние 44
+    value_literal    переход в состояние 45
+
+
+Состояние 58
+
+   31 object: • "{" $@1 optional_object_elements "}"
+   41 operator_binary: • expression "or operator" expression
+   42                | • expression "and operator" expression
+   43                | • expression "==" expression
+   44                | • expression "!=" expression
+   45                | • expression "<" expression
+   46                | • expression ">" expression
+   47                | • expression "<=" expression
+   48                | • expression ">=" expression
+   49                | • expression "IN" expression
+   49                | expression "IN" • expression
+   50 contains: • "contains function" "(" expression "," expression ")"
+   51 expression: • operator_binary
+   52           | • value_literal
+   53           | • reference
+   54           | • contains
+   55 reference: • "string"
+   56          | • reference '.' "string"
+   57          | • "(" expression ")"
+   58          | • object
+   59 numeric_value: • "int"
+   60              | • "double"
+   61 value_literal: • "q-string"
+   62              | • numeric_value
+   63              | • "null"
+   64              | • "true"
+   65              | • "false"
+
+    "q-string"           сдвиг, и переход в состояние 29
+    "null"               сдвиг, и переход в состояние 30
+    "true"               сдвиг, и переход в состояние 31
+    "false"              сдвиг, и переход в состояние 32
+    "string"             сдвиг, и переход в состояние 33
+    "int"                сдвиг, и переход в состояние 34
+    "double"             сдвиг, и переход в состояние 35
+    "("                  сдвиг, и переход в состояние 36
+    "{"                  сдвиг, и переход в состояние 37
+    "contains function"  сдвиг, и переход в состояние 38
+
+    object           переход в состояние 39
+    operator_binary  переход в состояние 40
+    contains         переход в состояние 41
+    expression       переход в состояние 84
+    reference        переход в состояние 43
+    numeric_value    переход в состояние 44
+    value_literal    переход в состояние 45
+
+
+Состояние 59
+
+   31 object: • "{" $@1 optional_object_elements "}"
+   41 operator_binary: • expression "or operator" expression
+   42                | • expression "and operator" expression
+   43                | • expression "==" expression
+   43                | expression "==" • expression
+   44                | • expression "!=" expression
+   45                | • expression "<" expression
+   46                | • expression ">" expression
+   47                | • expression "<=" expression
+   48                | • expression ">=" expression
+   49                | • expression "IN" expression
+   50 contains: • "contains function" "(" expression "," expression ")"
+   51 expression: • operator_binary
+   52           | • value_literal
+   53           | • reference
+   54           | • contains
+   55 reference: • "string"
+   56          | • reference '.' "string"
+   57          | • "(" expression ")"
+   58          | • object
+   59 numeric_value: • "int"
+   60              | • "double"
+   61 value_literal: • "q-string"
+   62              | • numeric_value
+   63              | • "null"
+   64              | • "true"
+   65              | • "false"
+
+    "q-string"           сдвиг, и переход в состояние 29
+    "null"               сдвиг, и переход в состояние 30
+    "true"               сдвиг, и переход в состояние 31
+    "false"              сдвиг, и переход в состояние 32
+    "string"             сдвиг, и переход в состояние 33
+    "int"                сдвиг, и переход в состояние 34
+    "double"             сдвиг, и переход в состояние 35
+    "("                  сдвиг, и переход в состояние 36
+    "{"                  сдвиг, и переход в состояние 37
+    "contains function"  сдвиг, и переход в состояние 38
+
+    object           переход в состояние 39
+    operator_binary  переход в состояние 40
+    contains         переход в состояние 41
+    expression       переход в состояние 85
+    reference        переход в состояние 43
+    numeric_value    переход в состояние 44
+    value_literal    переход в состояние 45
+
+
+Состояние 60
+
+   31 object: • "{" $@1 optional_object_elements "}"
+   41 operator_binary: • expression "or operator" expression
+   42                | • expression "and operator" expression
+   43                | • expression "==" expression
+   44                | • expression "!=" expression
+   44                | expression "!=" • expression
+   45                | • expression "<" expression
+   46                | • expression ">" expression
+   47                | • expression "<=" expression
+   48                | • expression ">=" expression
+   49                | • expression "IN" expression
+   50 contains: • "contains function" "(" expression "," expression ")"
+   51 expression: • operator_binary
+   52           | • value_literal
+   53           | • reference
+   54           | • contains
+   55 reference: • "string"
+   56          | • reference '.' "string"
+   57          | • "(" expression ")"
+   58          | • object
+   59 numeric_value: • "int"
+   60              | • "double"
+   61 value_literal: • "q-string"
+   62              | • numeric_value
+   63              | • "null"
+   64              | • "true"
+   65              | • "false"
+
+    "q-string"           сдвиг, и переход в состояние 29
+    "null"               сдвиг, и переход в состояние 30
+    "true"               сдвиг, и переход в состояние 31
+    "false"              сдвиг, и переход в состояние 32
+    "string"             сдвиг, и переход в состояние 33
+    "int"                сдвиг, и переход в состояние 34
+    "double"             сдвиг, и переход в состояние 35
+    "("                  сдвиг, и переход в состояние 36
+    "{"                  сдвиг, и переход в состояние 37
+    "contains function"  сдвиг, и переход в состояние 38
+
+    object           переход в состояние 39
+    operator_binary  переход в состояние 40
+    contains         переход в состояние 41
+    expression       переход в состояние 86
+    reference        переход в состояние 43
+    numeric_value    переход в состояние 44
+    value_literal    переход в состояние 45
+
+
+Состояние 61
+
+   31 object: • "{" $@1 optional_object_elements "}"
+   41 operator_binary: • expression "or operator" expression
+   42                | • expression "and operator" expression
+   43                | • expression "==" expression
+   44                | • expression "!=" expression
+   45                | • expression "<" expression
+   45                | expression "<" • expression
+   46                | • expression ">" expression
+   47                | • expression "<=" expression
+   48                | • expression ">=" expression
+   49                | • expression "IN" expression
+   50 contains: • "contains function" "(" expression "," expression ")"
+   51 expression: • operator_binary
+   52           | • value_literal
+   53           | • reference
+   54           | • contains
+   55 reference: • "string"
+   56          | • reference '.' "string"
+   57          | • "(" expression ")"
+   58          | • object
+   59 numeric_value: • "int"
+   60              | • "double"
+   61 value_literal: • "q-string"
+   62              | • numeric_value
+   63              | • "null"
+   64              | • "true"
+   65              | • "false"
+
+    "q-string"           сдвиг, и переход в состояние 29
+    "null"               сдвиг, и переход в состояние 30
+    "true"               сдвиг, и переход в состояние 31
+    "false"              сдвиг, и переход в состояние 32
+    "string"             сдвиг, и переход в состояние 33
+    "int"                сдвиг, и переход в состояние 34
+    "double"             сдвиг, и переход в состояние 35
+    "("                  сдвиг, и переход в состояние 36
+    "{"                  сдвиг, и переход в состояние 37
+    "contains function"  сдвиг, и переход в состояние 38
+
+    object           переход в состояние 39
+    operator_binary  переход в состояние 40
+    contains         переход в состояние 41
+    expression       переход в состояние 87
+    reference        переход в состояние 43
+    numeric_value    переход в состояние 44
+    value_literal    переход в состояние 45
+
+
+Состояние 62
+
+   31 object: • "{" $@1 optional_object_elements "}"
+   41 operator_binary: • expression "or operator" expression
+   42                | • expression "and operator" expression
+   43                | • expression "==" expression
+   44                | • expression "!=" expression
+   45                | • expression "<" expression
+   46                | • expression ">" expression
+   46                | expression ">" • expression
+   47                | • expression "<=" expression
+   48                | • expression ">=" expression
+   49                | • expression "IN" expression
+   50 contains: • "contains function" "(" expression "," expression ")"
+   51 expression: • operator_binary
+   52           | • value_literal
+   53           | • reference
+   54           | • contains
+   55 reference: • "string"
+   56          | • reference '.' "string"
+   57          | • "(" expression ")"
+   58          | • object
+   59 numeric_value: • "int"
+   60              | • "double"
+   61 value_literal: • "q-string"
+   62              | • numeric_value
+   63              | • "null"
+   64              | • "true"
+   65              | • "false"
+
+    "q-string"           сдвиг, и переход в состояние 29
+    "null"               сдвиг, и переход в состояние 30
+    "true"               сдвиг, и переход в состояние 31
+    "false"              сдвиг, и переход в состояние 32
+    "string"             сдвиг, и переход в состояние 33
+    "int"                сдвиг, и переход в состояние 34
+    "double"             сдвиг, и переход в состояние 35
+    "("                  сдвиг, и переход в состояние 36
+    "{"                  сдвиг, и переход в состояние 37
+    "contains function"  сдвиг, и переход в состояние 38
+
+    object           переход в состояние 39
+    operator_binary  переход в состояние 40
+    contains         переход в состояние 41
+    expression       переход в состояние 88
+    reference        переход в состояние 43
+    numeric_value    переход в состояние 44
+    value_literal    переход в состояние 45
+
+
+Состояние 63
+
+   31 object: • "{" $@1 optional_object_elements "}"
+   41 operator_binary: • expression "or operator" expression
+   42                | • expression "and operator" expression
+   43                | • expression "==" expression
+   44                | • expression "!=" expression
+   45                | • expression "<" expression
+   46                | • expression ">" expression
+   47                | • expression "<=" expression
+   47                | expression "<=" • expression
+   48                | • expression ">=" expression
+   49                | • expression "IN" expression
+   50 contains: • "contains function" "(" expression "," expression ")"
+   51 expression: • operator_binary
+   52           | • value_literal
+   53           | • reference
+   54           | • contains
+   55 reference: • "string"
+   56          | • reference '.' "string"
+   57          | • "(" expression ")"
+   58          | • object
+   59 numeric_value: • "int"
+   60              | • "double"
+   61 value_literal: • "q-string"
+   62              | • numeric_value
+   63              | • "null"
+   64              | • "true"
+   65              | • "false"
+
+    "q-string"           сдвиг, и переход в состояние 29
+    "null"               сдвиг, и переход в состояние 30
+    "true"               сдвиг, и переход в состояние 31
+    "false"              сдвиг, и переход в состояние 32
+    "string"             сдвиг, и переход в состояние 33
+    "int"                сдвиг, и переход в состояние 34
+    "double"             сдвиг, и переход в состояние 35
+    "("                  сдвиг, и переход в состояние 36
+    "{"                  сдвиг, и переход в состояние 37
+    "contains function"  сдвиг, и переход в состояние 38
+
+    object           переход в состояние 39
+    operator_binary  переход в состояние 40
+    contains         переход в состояние 41
+    expression       переход в состояние 89
+    reference        переход в состояние 43
+    numeric_value    переход в состояние 44
+    value_literal    переход в состояние 45
+
+
+Состояние 64
+
+   31 object: • "{" $@1 optional_object_elements "}"
+   41 operator_binary: • expression "or operator" expression
+   42                | • expression "and operator" expression
+   43                | • expression "==" expression
+   44                | • expression "!=" expression
+   45                | • expression "<" expression
+   46                | • expression ">" expression
+   47                | • expression "<=" expression
+   48                | • expression ">=" expression
+   48                | expression ">=" • expression
+   49                | • expression "IN" expression
+   50 contains: • "contains function" "(" expression "," expression ")"
+   51 expression: • operator_binary
+   52           | • value_literal
+   53           | • reference
+   54           | • contains
+   55 reference: • "string"
+   56          | • reference '.' "string"
+   57          | • "(" expression ")"
+   58          | • object
+   59 numeric_value: • "int"
+   60              | • "double"
+   61 value_literal: • "q-string"
+   62              | • numeric_value
+   63              | • "null"
+   64              | • "true"
+   65              | • "false"
+
+    "q-string"           сдвиг, и переход в состояние 29
+    "null"               сдвиг, и переход в состояние 30
+    "true"               сдвиг, и переход в состояние 31
+    "false"              сдвиг, и переход в состояние 32
+    "string"             сдвиг, и переход в состояние 33
+    "int"                сдвиг, и переход в состояние 34
+    "double"             сдвиг, и переход в состояние 35
+    "("                  сдвиг, и переход в состояние 36
+    "{"                  сдвиг, и переход в состояние 37
+    "contains function"  сдвиг, и переход в состояние 38
+
+    object           переход в состояние 39
+    operator_binary  переход в состояние 40
+    contains         переход в состояние 41
+    expression       переход в состояние 90
+    reference        переход в состояние 43
+    numeric_value    переход в состояние 44
+    value_literal    переход в состояние 45
+
+
+Состояние 65
+
+   31 object: • "{" $@1 optional_object_elements "}"
+   41 operator_binary: • expression "or operator" expression
+   42                | • expression "and operator" expression
+   42                | expression "and operator" • expression
+   43                | • expression "==" expression
+   44                | • expression "!=" expression
+   45                | • expression "<" expression
+   46                | • expression ">" expression
+   47                | • expression "<=" expression
+   48                | • expression ">=" expression
+   49                | • expression "IN" expression
+   50 contains: • "contains function" "(" expression "," expression ")"
+   51 expression: • operator_binary
+   52           | • value_literal
+   53           | • reference
+   54           | • contains
+   55 reference: • "string"
+   56          | • reference '.' "string"
+   57          | • "(" expression ")"
+   58          | • object
+   59 numeric_value: • "int"
+   60              | • "double"
+   61 value_literal: • "q-string"
+   62              | • numeric_value
+   63              | • "null"
+   64              | • "true"
+   65              | • "false"
+
+    "q-string"           сдвиг, и переход в состояние 29
+    "null"               сдвиг, и переход в состояние 30
+    "true"               сдвиг, и переход в состояние 31
+    "false"              сдвиг, и переход в состояние 32
+    "string"             сдвиг, и переход в состояние 33
+    "int"                сдвиг, и переход в состояние 34
+    "double"             сдвиг, и переход в состояние 35
+    "("                  сдвиг, и переход в состояние 36
+    "{"                  сдвиг, и переход в состояние 37
+    "contains function"  сдвиг, и переход в состояние 38
+
+    object           переход в состояние 39
+    operator_binary  переход в состояние 40
+    contains         переход в состояние 41
+    expression       переход в состояние 91
+    reference        переход в состояние 43
+    numeric_value    переход в состояние 44
+    value_literal    переход в состояние 45
+
+
+Состояние 66
+
+   31 object: • "{" $@1 optional_object_elements "}"
+   41 operator_binary: • expression "or operator" expression
+   41                | expression "or operator" • expression
+   42                | • expression "and operator" expression
+   43                | • expression "==" expression
+   44                | • expression "!=" expression
+   45                | • expression "<" expression
+   46                | • expression ">" expression
+   47                | • expression "<=" expression
+   48                | • expression ">=" expression
+   49                | • expression "IN" expression
+   50 contains: • "contains function" "(" expression "," expression ")"
+   51 expression: • operator_binary
+   52           | • value_literal
+   53           | • reference
+   54           | • contains
+   55 reference: • "string"
+   56          | • reference '.' "string"
+   57          | • "(" expression ")"
+   58          | • object
+   59 numeric_value: • "int"
+   60              | • "double"
+   61 value_literal: • "q-string"
+   62              | • numeric_value
+   63              | • "null"
+   64              | • "true"
+   65              | • "false"
+
+    "q-string"           сдвиг, и переход в состояние 29
+    "null"               сдвиг, и переход в состояние 30
+    "true"               сдвиг, и переход в состояние 31
+    "false"              сдвиг, и переход в состояние 32
+    "string"             сдвиг, и переход в состояние 33
+    "int"                сдвиг, и переход в состояние 34
+    "double"             сдвиг, и переход в состояние 35
+    "("                  сдвиг, и переход в состояние 36
+    "{"                  сдвиг, и переход в состояние 37
+    "contains function"  сдвиг, и переход в состояние 38
+
+    object           переход в состояние 39
+    operator_binary  переход в состояние 40
+    contains         переход в состояние 41
+    expression       переход в состояние 92
+    reference        переход в состояние 43
+    numeric_value    переход в состояние 44
+    value_literal    переход в состояние 45
+
+
+Состояние 67
+
+   56 reference: reference '.' • "string"
+
+    "string"  сдвиг, и переход в состояние 93
+
+
+Состояние 68
+
+   25 in_collection: "IN" • in_collection_name
+   31 object: • "{" $@1 optional_object_elements "}"
+   41 operator_binary: • expression "or operator" expression
+   42                | • expression "and operator" expression
+   43                | • expression "==" expression
+   44                | • expression "!=" expression
+   45                | • expression "<" expression
+   46                | • expression ">" expression
+   47                | • expression "<=" expression
+   48                | • expression ">=" expression
+   49                | • expression "IN" expression
+   49                | expression "IN" • expression
+   50 contains: • "contains function" "(" expression "," expression ")"
+   51 expression: • operator_binary
+   52           | • value_literal
+   53           | • reference
+   54           | • contains
+   55 reference: • "string"
+   56          | • reference '.' "string"
+   57          | • "(" expression ")"
+   58          | • object
+   59 numeric_value: • "int"
+   60              | • "double"
+   61 value_literal: • "q-string"
+   62              | • numeric_value
+   63              | • "null"
+   64              | • "true"
+   65              | • "false"
+   66 in_collection_name: • "string"
+
+    "q-string"           сдвиг, и переход в состояние 29
+    "null"               сдвиг, и переход в состояние 30
+    "true"               сдвиг, и переход в состояние 31
+    "false"              сдвиг, и переход в состояние 32
+    "string"             сдвиг, и переход в состояние 94
+    "int"                сдвиг, и переход в состояние 34
+    "double"             сдвиг, и переход в состояние 35
+    "("                  сдвиг, и переход в состояние 36
+    "{"                  сдвиг, и переход в состояние 37
+    "contains function"  сдвиг, и переход в состояние 38
+
+    object              переход в состояние 39
+    operator_binary     переход в состояние 40
+    contains            переход в состояние 41
+    expression          переход в состояние 84
+    reference           переход в состояние 43
+    numeric_value       переход в состояние 44
+    value_literal       переход в состояние 45
+    in_collection_name  переход в состояние 95
+
+
+Состояние 69
+
+   26 remove_statement: "REMOVE" expression in_collection •
+
+    $default  вывод с использованием правила 26 (remove_statement)
+
+
+Состояние 70
+
+   27 insert_statement: "INSERT" expression in_collection •
+
+    $default  вывод с использованием правила 27 (insert_statement)
+
+
+Состояние 71
+
+   28 update_parameters: expression in_collection •
+
+    $default  вывод с использованием правила 28 (update_parameters)
+
+
+Состояние 72
+
+    8 column: "string" ":" • "string"
+
+    "string"  сдвиг, и переход в состояние 96
+
+
+Состояние 73
+
+    7 column_list: column_list "," • column
+    8 column: • "string" ":" "string"
+
+    "string"  сдвиг, и переход в состояние 51
+
+    column  переход в состояние 97
+
+
+Состояние 74
+
+    4 create_table_statement: "CREATE_TABLE" "string" "{" column_list "}" •
+
+    $default  вывод с использованием правила 4 (create_table_statement)
+
+
+Состояние 75
+
+   22 for_statement: "FOR" for_output_variable "IN" expression •
+   41 operator_binary: expression • "or operator" expression
+   42                | expression • "and operator" expression
+   43                | expression • "==" expression
+   44                | expression • "!=" expression
+   45                | expression • "<" expression
+   46                | expression • ">" expression
+   47                | expression • "<=" expression
+   48                | expression • ">=" expression
+   49                | expression • "IN" expression
+
+    "IN"            сдвиг, и переход в состояние 58
+    "=="            сдвиг, и переход в состояние 59
+    "!="            сдвиг, и переход в состояние 60
+    "<"             сдвиг, и переход в состояние 61
+    ">"             сдвиг, и переход в состояние 62
+    "<="            сдвиг, и переход в состояние 63
+    ">="            сдвиг, и переход в состояние 64
+    "and operator"  сдвиг, и переход в состояние 65
+    "or operator"   сдвиг, и переход в состояние 66
+
+    $default  вывод с использованием правила 22 (for_statement)
+
+
+Состояние 76
+
+   57 reference: "(" expression ")" •
+
+    $default  вывод с использованием правила 57 (reference)
+
+
+Состояние 77
+
+   40 object_element_name: "q-string" •
+
+    $default  вывод с использованием правила 40 (object_element_name)
+
+
+Состояние 78
+
+   37 object_element: "string" •
+   39 object_element_name: "string" •
+
+    ":"       вывод с использованием правила 39 (object_element_name)
+    $default  вывод с использованием правила 37 (object_element)
+
+
+Состояние 79
+
+   31 object: "{" $@1 optional_object_elements • "}"
+
+    "}"  сдвиг, и переход в состояние 98
+
+
+Состояние 80
+
+   33 optional_object_elements: object_elements_list •
+   34                         | object_elements_list • ","
+   36 object_elements_list: object_elements_list • "," object_element
+
+    ","  сдвиг, и переход в состояние 99
+
+    $default  вывод с использованием правила 33 (optional_object_elements)
+
+
+Состояние 81
+
+   35 object_elements_list: object_element •
+
+    $default  вывод с использованием правила 35 (object_elements_list)
+
+
+Состояние 82
+
+   38 object_element: object_element_name • ":" expression
+
+    ":"  сдвиг, и переход в состояние 100
+
+
+Состояние 83
+
+   41 operator_binary: expression • "or operator" expression
+   42                | expression • "and operator" expression
+   43                | expression • "==" expression
+   44                | expression • "!=" expression
+   45                | expression • "<" expression
+   46                | expression • ">" expression
+   47                | expression • "<=" expression
+   48                | expression • ">=" expression
+   49                | expression • "IN" expression
+   50 contains: "contains function" "(" expression • "," expression ")"
+
+    "IN"            сдвиг, и переход в состояние 58
+    "=="            сдвиг, и переход в состояние 59
+    "!="            сдвиг, и переход в состояние 60
+    "<"             сдвиг, и переход в состояние 61
+    ">"             сдвиг, и переход в состояние 62
+    "<="            сдвиг, и переход в состояние 63
+    ">="            сдвиг, и переход в состояние 64
+    ","             сдвиг, и переход в состояние 101
+    "and operator"  сдвиг, и переход в состояние 65
+    "or operator"   сдвиг, и переход в состояние 66
+
+
+Состояние 84
+
+   41 operator_binary: expression • "or operator" expression
+   42                | expression • "and operator" expression
+   43                | expression • "==" expression
+   44                | expression • "!=" expression
+   45                | expression • "<" expression
+   46                | expression • ">" expression
+   47                | expression • "<=" expression
+   48                | expression • ">=" expression
+   49                | expression • "IN" expression
+   49                | expression "IN" expression •
+
+    "IN"            сдвиг, и переход в состояние 58
+    "=="            сдвиг, и переход в состояние 59
+    "!="            сдвиг, и переход в состояние 60
+    "<"             сдвиг, и переход в состояние 61
+    ">"             сдвиг, и переход в состояние 62
+    "<="            сдвиг, и переход в состояние 63
+    ">="            сдвиг, и переход в состояние 64
+    "and operator"  сдвиг, и переход в состояние 65
+    "or operator"   сдвиг, и переход в состояние 66
+
+    "IN"            [вывод с использованием правила 49 (operator_binary)]
+    "=="            [вывод с использованием правила 49 (operator_binary)]
+    "!="            [вывод с использованием правила 49 (operator_binary)]
+    "<"             [вывод с использованием правила 49 (operator_binary)]
+    ">"             [вывод с использованием правила 49 (operator_binary)]
+    "<="            [вывод с использованием правила 49 (operator_binary)]
+    ">="            [вывод с использованием правила 49 (operator_binary)]
+    "and operator"  [вывод с использованием правила 49 (operator_binary)]
+    "or operator"   [вывод с использованием правила 49 (operator_binary)]
+    $default        вывод с использованием правила 49 (operator_binary)
+
+
+Состояние 85
+
+   41 operator_binary: expression • "or operator" expression
+   42                | expression • "and operator" expression
+   43                | expression • "==" expression
+   43                | expression "==" expression •
+   44                | expression • "!=" expression
+   45                | expression • "<" expression
+   46                | expression • ">" expression
+   47                | expression • "<=" expression
+   48                | expression • ">=" expression
+   49                | expression • "IN" expression
+
+    "IN"  сдвиг, и переход в состояние 58
+    "<"   сдвиг, и переход в состояние 61
+    ">"   сдвиг, и переход в состояние 62
+    "<="  сдвиг, и переход в состояние 63
+    ">="  сдвиг, и переход в состояние 64
+
+    "IN"      [вывод с использованием правила 43 (operator_binary)]
+    $default  вывод с использованием правила 43 (operator_binary)
+
+
+Состояние 86
+
+   41 operator_binary: expression • "or operator" expression
+   42                | expression • "and operator" expression
+   43                | expression • "==" expression
+   44                | expression • "!=" expression
+   44                | expression "!=" expression •
+   45                | expression • "<" expression
+   46                | expression • ">" expression
+   47                | expression • "<=" expression
+   48                | expression • ">=" expression
+   49                | expression • "IN" expression
+
+    "IN"  сдвиг, и переход в состояние 58
+    "<"   сдвиг, и переход в состояние 61
+    ">"   сдвиг, и переход в состояние 62
+    "<="  сдвиг, и переход в состояние 63
+    ">="  сдвиг, и переход в состояние 64
+
+    "IN"      [вывод с использованием правила 44 (operator_binary)]
+    $default  вывод с использованием правила 44 (operator_binary)
+
+
+Состояние 87
+
+   41 operator_binary: expression • "or operator" expression
+   42                | expression • "and operator" expression
+   43                | expression • "==" expression
+   44                | expression • "!=" expression
+   45                | expression • "<" expression
+   45                | expression "<" expression •
+   46                | expression • ">" expression
+   47                | expression • "<=" expression
+   48                | expression • ">=" expression
+   49                | expression • "IN" expression
+
+    "IN"  сдвиг, и переход в состояние 58
+
+    "IN"      [вывод с использованием правила 45 (operator_binary)]
+    $default  вывод с использованием правила 45 (operator_binary)
+
+
+Состояние 88
+
+   41 operator_binary: expression • "or operator" expression
+   42                | expression • "and operator" expression
+   43                | expression • "==" expression
+   44                | expression • "!=" expression
+   45                | expression • "<" expression
+   46                | expression • ">" expression
+   46                | expression ">" expression •
+   47                | expression • "<=" expression
+   48                | expression • ">=" expression
+   49                | expression • "IN" expression
+
+    "IN"  сдвиг, и переход в состояние 58
+
+    "IN"      [вывод с использованием правила 46 (operator_binary)]
+    $default  вывод с использованием правила 46 (operator_binary)
+
+
+Состояние 89
+
+   41 operator_binary: expression • "or operator" expression
+   42                | expression • "and operator" expression
+   43                | expression • "==" expression
+   44                | expression • "!=" expression
+   45                | expression • "<" expression
+   46                | expression • ">" expression
+   47                | expression • "<=" expression
+   47                | expression "<=" expression •
+   48                | expression • ">=" expression
+   49                | expression • "IN" expression
+
+    "IN"  сдвиг, и переход в состояние 58
+
+    "IN"      [вывод с использованием правила 47 (operator_binary)]
+    $default  вывод с использованием правила 47 (operator_binary)
+
+
+Состояние 90
+
+   41 operator_binary: expression • "or operator" expression
+   42                | expression • "and operator" expression
+   43                | expression • "==" expression
+   44                | expression • "!=" expression
+   45                | expression • "<" expression
+   46                | expression • ">" expression
+   47                | expression • "<=" expression
+   48                | expression • ">=" expression
+   48                | expression ">=" expression •
+   49                | expression • "IN" expression
+
+    "IN"  сдвиг, и переход в состояние 58
+
+    "IN"      [вывод с использованием правила 48 (operator_binary)]
+    $default  вывод с использованием правила 48 (operator_binary)
+
+
+Состояние 91
+
+   41 operator_binary: expression • "or operator" expression
+   42                | expression • "and operator" expression
+   42                | expression "and operator" expression •
+   43                | expression • "==" expression
+   44                | expression • "!=" expression
+   45                | expression • "<" expression
+   46                | expression • ">" expression
+   47                | expression • "<=" expression
+   48                | expression • ">=" expression
+   49                | expression • "IN" expression
+
+    "IN"  сдвиг, и переход в состояние 58
+    "=="  сдвиг, и переход в состояние 59
+    "!="  сдвиг, и переход в состояние 60
+    "<"   сдвиг, и переход в состояние 61
+    ">"   сдвиг, и переход в состояние 62
+    "<="  сдвиг, и переход в состояние 63
+    ">="  сдвиг, и переход в состояние 64
+
+    "IN"      [вывод с использованием правила 42 (operator_binary)]
+    $default  вывод с использованием правила 42 (operator_binary)
+
+
+Состояние 92
+
+   41 operator_binary: expression • "or operator" expression
+   41                | expression "or operator" expression •
+   42                | expression • "and operator" expression
+   43                | expression • "==" expression
+   44                | expression • "!=" expression
+   45                | expression • "<" expression
+   46                | expression • ">" expression
+   47                | expression • "<=" expression
+   48                | expression • ">=" expression
+   49                | expression • "IN" expression
+
+    "IN"            сдвиг, и переход в состояние 58
+    "=="            сдвиг, и переход в состояние 59
+    "!="            сдвиг, и переход в состояние 60
+    "<"             сдвиг, и переход в состояние 61
+    ">"             сдвиг, и переход в состояние 62
+    "<="            сдвиг, и переход в состояние 63
+    ">="            сдвиг, и переход в состояние 64
+    "and operator"  сдвиг, и переход в состояние 65
+
+    "IN"      [вывод с использованием правила 41 (operator_binary)]
+    $default  вывод с использованием правила 41 (operator_binary)
+
+
+Состояние 93
+
+   56 reference: reference '.' "string" •
+
+    $default  вывод с использованием правила 56 (reference)
+
+
+Состояние 94
+
+   55 reference: "string" •
+   66 in_collection_name: "string" •
+
+    "end"     вывод с использованием правила 66 (in_collection_name)
+    "FOR"     вывод с использованием правила 66 (in_collection_name)
+    "FILTER"  вывод с использованием правила 66 (in_collection_name)
+    "RETURN"  вывод с использованием правила 66 (in_collection_name)
+    "REMOVE"  вывод с использованием правила 66 (in_collection_name)
+    "INSERT"  вывод с использованием правила 66 (in_collection_name)
+    "UPDATE"  вывод с использованием правила 66 (in_collection_name)
+    $default  вывод с использованием правила 55 (reference)
+
+
+Состояние 95
+
+   25 in_collection: "IN" in_collection_name •
+
+    $default  вывод с использованием правила 25 (in_collection)
+
+
+Состояние 96
+
+    8 column: "string" ":" "string" •
+
+    $default  вывод с использованием правила 8 (column)
+
+
+Состояние 97
+
+    7 column_list: column_list "," column •
+
+    $default  вывод с использованием правила 7 (column_list)
+
+
+Состояние 98
+
+   31 object: "{" $@1 optional_object_elements "}" •
+
+    $default  вывод с использованием правила 31 (object)
+
+
+Состояние 99
+
+   34 optional_object_elements: object_elements_list "," •
+   36 object_elements_list: object_elements_list "," • object_element
+   37 object_element: • "string"
+   38               | • object_element_name ":" expression
+   39 object_element_name: • "string"
+   40                    | • "q-string"
+
+    "q-string"  сдвиг, и переход в состояние 77
+    "string"    сдвиг, и переход в состояние 78
+
+    $default  вывод с использованием правила 34 (optional_object_elements)
+
+    object_element       переход в состояние 102
+    object_element_name  переход в состояние 82
+
+
+Состояние 100
+
+   31 object: • "{" $@1 optional_object_elements "}"
+   38 object_element: object_element_name ":" • expression
+   41 operator_binary: • expression "or operator" expression
+   42                | • expression "and operator" expression
+   43                | • expression "==" expression
+   44                | • expression "!=" expression
+   45                | • expression "<" expression
+   46                | • expression ">" expression
+   47                | • expression "<=" expression
+   48                | • expression ">=" expression
+   49                | • expression "IN" expression
+   50 contains: • "contains function" "(" expression "," expression ")"
+   51 expression: • operator_binary
+   52           | • value_literal
+   53           | • reference
+   54           | • contains
+   55 reference: • "string"
+   56          | • reference '.' "string"
+   57          | • "(" expression ")"
+   58          | • object
+   59 numeric_value: • "int"
+   60              | • "double"
+   61 value_literal: • "q-string"
+   62              | • numeric_value
+   63              | • "null"
+   64              | • "true"
+   65              | • "false"
+
+    "q-string"           сдвиг, и переход в состояние 29
+    "null"               сдвиг, и переход в состояние 30
+    "true"               сдвиг, и переход в состояние 31
+    "false"              сдвиг, и переход в состояние 32
+    "string"             сдвиг, и переход в состояние 33
+    "int"                сдвиг, и переход в состояние 34
+    "double"             сдвиг, и переход в состояние 35
+    "("                  сдвиг, и переход в состояние 36
+    "{"                  сдвиг, и переход в состояние 37
+    "contains function"  сдвиг, и переход в состояние 38
+
+    object           переход в состояние 39
+    operator_binary  переход в состояние 40
+    contains         переход в состояние 41
+    expression       переход в состояние 103
+    reference        переход в состояние 43
+    numeric_value    переход в состояние 44
+    value_literal    переход в состояние 45
+
+
+Состояние 101
+
+   31 object: • "{" $@1 optional_object_elements "}"
+   41 operator_binary: • expression "or operator" expression
+   42                | • expression "and operator" expression
+   43                | • expression "==" expression
+   44                | • expression "!=" expression
+   45                | • expression "<" expression
+   46                | • expression ">" expression
+   47                | • expression "<=" expression
+   48                | • expression ">=" expression
+   49                | • expression "IN" expression
+   50 contains: • "contains function" "(" expression "," expression ")"
+   50         | "contains function" "(" expression "," • expression ")"
+   51 expression: • operator_binary
+   52           | • value_literal
+   53           | • reference
+   54           | • contains
+   55 reference: • "string"
+   56          | • reference '.' "string"
+   57          | • "(" expression ")"
+   58          | • object
+   59 numeric_value: • "int"
+   60              | • "double"
+   61 value_literal: • "q-string"
+   62              | • numeric_value
+   63              | • "null"
+   64              | • "true"
+   65              | • "false"
+
+    "q-string"           сдвиг, и переход в состояние 29
+    "null"               сдвиг, и переход в состояние 30
+    "true"               сдвиг, и переход в состояние 31
+    "false"              сдвиг, и переход в состояние 32
+    "string"             сдвиг, и переход в состояние 33
+    "int"                сдвиг, и переход в состояние 34
+    "double"             сдвиг, и переход в состояние 35
+    "("                  сдвиг, и переход в состояние 36
+    "{"                  сдвиг, и переход в состояние 37
+    "contains function"  сдвиг, и переход в состояние 38
+
+    object           переход в состояние 39
+    operator_binary  переход в состояние 40
+    contains         переход в состояние 41
+    expression       переход в состояние 104
+    reference        переход в состояние 43
+    numeric_value    переход в состояние 44
+    value_literal    переход в состояние 45
+
+
+Состояние 102
+
+   36 object_elements_list: object_elements_list "," object_element •
+
+    $default  вывод с использованием правила 36 (object_elements_list)
+
+
+Состояние 103
+
+   38 object_element: object_element_name ":" expression •
+   41 operator_binary: expression • "or operator" expression
+   42                | expression • "and operator" expression
+   43                | expression • "==" expression
+   44                | expression • "!=" expression
+   45                | expression • "<" expression
+   46                | expression • ">" expression
+   47                | expression • "<=" expression
+   48                | expression • ">=" expression
+   49                | expression • "IN" expression
+
+    "IN"            сдвиг, и переход в состояние 58
+    "=="            сдвиг, и переход в состояние 59
+    "!="            сдвиг, и переход в состояние 60
+    "<"             сдвиг, и переход в состояние 61
+    ">"             сдвиг, и переход в состояние 62
+    "<="            сдвиг, и переход в состояние 63
+    ">="            сдвиг, и переход в состояние 64
+    "and operator"  сдвиг, и переход в состояние 65
+    "or operator"   сдвиг, и переход в состояние 66
+
+    $default  вывод с использованием правила 38 (object_element)
+
+
+Состояние 104
+
+   41 operator_binary: expression • "or operator" expression
+   42                | expression • "and operator" expression
+   43                | expression • "==" expression
+   44                | expression • "!=" expression
+   45                | expression • "<" expression
+   46                | expression • ">" expression
+   47                | expression • "<=" expression
+   48                | expression • ">=" expression
+   49                | expression • "IN" expression
+   50 contains: "contains function" "(" expression "," expression • ")"
+
+    "IN"            сдвиг, и переход в состояние 58
+    "=="            сдвиг, и переход в состояние 59
+    "!="            сдвиг, и переход в состояние 60
+    "<"             сдвиг, и переход в состояние 61
+    ">"             сдвиг, и переход в состояние 62
+    "<="            сдвиг, и переход в состояние 63
+    ">="            сдвиг, и переход в состояние 64
+    ")"             сдвиг, и переход в состояние 105
+    "and operator"  сдвиг, и переход в состояние 65
+    "or operator"   сдвиг, и переход в состояние 66
+
+
+Состояние 105
+
+   50 contains: "contains function" "(" expression "," expression ")" •
+
+    $default  вывод с использованием правила 50 (contains)

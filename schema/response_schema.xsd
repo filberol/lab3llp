@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:complexType name="RowNodeType">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="val" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="RowType">
+        <xs:sequence>
+            <xs:element name="rowNode" type="RowNodeType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="response">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="message" type="xs:string"/>
+                <xs:element name="hasNext" type="xs:boolean"/>
+                <xs:element name="row" type="RowType" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
