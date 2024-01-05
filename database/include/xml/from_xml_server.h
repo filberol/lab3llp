@@ -7,7 +7,7 @@
 
 #include <libxml/xmlschemas.h>
 
-#include "../aggregator/public/database.h"
+#include "../public/database.h"
 
 #define PARSE_ERROR 1
 
@@ -18,9 +18,7 @@ enum requestType {
     INSERT,
     SELECT,
     DELETE,
-    UPDATE,
-    JOIN,
-    NEXT
+    UPDATE
 };
 
 struct createTableRequest {
@@ -61,21 +59,6 @@ struct updateRequest {
     struct Condition *conditions;
 };
 
-struct JoinTable {
-    char* name;
-    char* alias;
-};
-
-struct joinRequest {
-    int32_t selectColumnsNum;
-    struct TableAliasAndColumn *selectColumns;
-    int32_t joinTablesNum;
-    struct JoinTable *joinTables;
-    int32_t joinConditionNum;
-    struct JoinCondition *joinCondition;
-    int32_t filtersNum;
-    struct JoinWhereCondition *joinWhereCondition;
-};
 
 struct request {
     enum requestType type;
@@ -86,11 +69,10 @@ struct request {
         struct selectRequest selectRequest;
         struct deleteRequest deleteRequest;
         struct updateRequest updateRequest;
-        struct joinRequest joinRequest;
     };
 };
 
 void freeRequest(struct request *request);
-
 int parseXml(xmlDocPtr xmlDocument, struct request *request);
+
 #endif //LAB3_FROM_XML_SERVER_H

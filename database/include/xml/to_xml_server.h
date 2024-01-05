@@ -11,7 +11,7 @@
 #include <libxml/tree.h>
 
 #include <libxml/xmlschemas.h>
-#include "../aggregator/public/database.h"
+#include "../public/database.h"
 
 void addMessage(xmlNodePtr root, char *error);
 

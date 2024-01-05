@@ -8,7 +8,6 @@
                             <xs:enumeration value="SELECT"/>
                             <xs:enumeration value="INSERT"/>
                             <xs:enumeration value="DELETE"/>
-                            <xs:enumeration value="UPDATE"/>
                             <xs:enumeration value="CREATE_TABLE"/>
                             <xs:enumeration value="DROP_TABLE"/>
                         </xs:restriction>
@@ -64,14 +63,6 @@
                             </xs:complexType>
                         </xs:element>
                     </xs:sequence>
-                    <xs:element name="join">
-                        <xs:complexType>
-                            <xs:sequence>
-                                <xs:element name="joinConditions" type="JoinConditionType"/>
-                                <xs:element name="filterConditions" type="FilterConditionType" minOccurs="0"/>
-                            </xs:sequence>
-                        </xs:complexType>
-                    </xs:element>
                     <!-- If requestType is INSERT -->
                     <xs:element name="insertValues" minOccurs="0">
                         <xs:complexType>
@@ -81,30 +72,6 @@
                                         <xs:sequence>
                                             <xs:element name="name" type="xs:string"/>
                                             <xs:element name="value" type="xs:string"/>
-                                        </xs:sequence>
-                                    </xs:complexType>
-                                </xs:element>
-                            </xs:sequence>
-                        </xs:complexType>
-                    </xs:element>
-                    <!-- If requestType is UPDATE -->
-                    <xs:element name="updateValues" minOccurs="0">
-                        <xs:complexType>
-                            <xs:sequence>
-                                <xs:element name="field" maxOccurs="unbounded">
-                                    <xs:complexType>
-                                        <xs:sequence>
-                                            <xs:element name="name" type="xs:string"/>
-                                            <xs:element name="type">
-                                                <xs:simpleType>
-                                                    <xs:restriction base="xs:string">
-                                                        <xs:enumeration value="string"/>
-                                                        <xs:enumeration value="int"/>
-                                                        <xs:enumeration value="double"/>
-                                                        <xs:enumeration value="boolean"/>
-                                                    </xs:restriction>
-                                                </xs:simpleType>
-                                            </xs:element>
                                         </xs:sequence>
                                     </xs:complexType>
                                 </xs:element>
@@ -130,15 +97,6 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <xs:complexType name="JoinConditionType">
-        <xs:sequence>
-            <xs:element name="leftTable" type="xs:string"/>
-            <xs:element name="leftColumn" type="xs:string"/>
-            <xs:element name="operator" type="xs:string"/>
-            <xs:element name="rightTable" type="xs:string"/>
-            <xs:element name="rightColumn" type="xs:string"/>
-        </xs:sequence>
-    </xs:complexType>
     <xs:complexType name="FilterConditionType">
         <xs:sequence>
             <xs:element name="table" type="xs:string"/>

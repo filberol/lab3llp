@@ -4,7 +4,7 @@
 #include "../include/instructions/file_instructions.h"
 #include "../include/tables/table_schema_utils.h"
 #include "../include/tables/table_row_utils.h"
-#include "../include/aggregator/public/table_structures.h"
+#include "../include/public/table_structures.h"
 #include <pthread.h>
 
 FILE* db_file;

@@ -1,9 +1,6 @@
-//
-// Created by moyak on 14.09.2023.
-//
 #include <stdlib.h>
-#include "../../include/aggregator/public/database.h"
-#include "../../include/aggregator/public/table_structures.h"
+#include "../../include/public/database.h"
+#include "../../include/public/table_structures.h"
 
 struct RecordData *prepareRecordDataStructure(struct TableScheme *tableHeader) {
     struct RecordData *recordData = malloc(sizeof(struct RecordData));
